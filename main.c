@@ -1,5 +1,5 @@
 /*
-sayem 1279                                          14.05.24
+sayem 1279                                          16.05.24
 Bus Reservation System
 */
 #include<windows.h>
@@ -175,6 +175,7 @@ void mainMenuBar(){
 void routeInfo(){
     waitSpin();
     int number;
+    gotoxy(70,12);
     printf("our offering routes:");
     gotoxy(50,15);
     printf("No:");
@@ -310,7 +311,9 @@ void buyTicket(){
     printf("Press 1: Sign In");
     gotoxy(70,17);
     printf("Press 2: Sign Up");
-    gotoxy(70,19);
+    gotoxy(70,21);
+    printf("Press 3: Main Menu");
+    gotoxy(70,23);
     printf(": ");
     scanf("%d",&cs);
    do{
@@ -321,8 +324,11 @@ void buyTicket(){
     case 2:
         signUp();
         break;
+    case 3:
+       mainMenuBar();
+        break;
     }
-   }while(cs>2);
+   }while(cs>3);
    mainMenuBar();
    getch();
 }
@@ -330,6 +336,7 @@ void signUp(){
     system("cls");
     FILE *cartInfo;
     char name;
+    char ch;
     char cartInfoFile[] = "sam-bus.txt";
     cartInfo = fopen(cartInfoFile, "a");
     gotoxy(70,10);
@@ -340,9 +347,20 @@ void signUp(){
     gotoxy(75,13);
     printf("Enter your name : ");
     scanf("%s",customer.name);
-    gotoxy(75,13);
+    gotoxy(75,15);
     printf("Enter your pass : ");
-    scanf("%s",customer.pass);
+    int i = 0;
+    while(ch!=13)
+    {
+        ch=getch();
+        if(ch!=13 && ch!=8)
+        {
+            putch('*');
+            customer.pass[i] = ch;
+            i++;
+        }
+    }
+    customer.pass[i] = '\0';
     system("cls");
     gotoxy(72,15);
     printf("Congrats \" %s \"",customer.name);
@@ -350,12 +368,13 @@ void signUp(){
     printf("Registration Successful...!!\n");
     usleep(500000);
     system("cls");
-    fprintf(cartInfo,"\n%d \t %s\n",customer.ID,customer.name);
+    fprintf(cartInfo,"\n%d \t %s \t %s\n",customer.ID,customer.name,customer.pass);
     fclose(cartInfo);
     mainMenuBar();
 }
 void signIn(){
     system("cls");
+    gotoxy(70, 6);
     printf("sign in");
     FILE *fileName;
     char infoFile[]="sam-bus.txt";
@@ -392,12 +411,17 @@ void signIn(){
     fileName = fopen(infoFile, "r");
     if (fileName == NULL) {
         printf("Error opening file!\n");
-        return -1;
+        return ;
     }
 
     while (fscanf(fileName, "%d %s %s", &customer.ID, customer.name, customer.pass) != EOF) {
         if (strcmp(customer.pass, pass) == 0 && customer.ID == userID && strcmp(customer.name, userName) == 0) {
-            printf("\nWelcome %s\nYour ID: %d\n\n", customer.name, customer.ID);
+            system("cls");
+                gotoxy(70,10);
+            printf("Welcome %s", customer.name);
+            gotoxy(70,12);
+            printf("Your ID: %d", customer.ID);
+            getch();
             found = 1;
             break;
         }
@@ -409,7 +433,7 @@ void signIn(){
         printf("\nNot found\n");
         exit(0);
     }
-    return 0;
+    return ;
     getch();
 }
 
