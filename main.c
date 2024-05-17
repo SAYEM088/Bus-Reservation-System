@@ -1,5 +1,5 @@
 /*
-sayem 1279                                          16.05.24
+sayem 1279                                          17.05.24
 Bus Reservation System
 */
 #include<windows.h>
@@ -97,7 +97,7 @@ void landingPage(){
     gotoxy(80, 23);
     printf("ID: 024231005341279");
      gotoxy(65, 25);
-     set_color(33,35);
+     set_color(33,5);
      printf("Enter Any Key to Start.....");
      getch();
      system("cls");
@@ -239,16 +239,28 @@ void routeA_P(){
     printf("Abdullahpur To Paltan");
     gotoxy(50,16);
     printf("Bus Name:");
+    gotoxy(75,16);
+    printf("Victor Classic");
     gotoxy(50,17);
     printf("starting/Departure");
+    gotoxy(75,17);
+    printf("Abdullahpur");
     gotoxy(50,18);
     printf("stoppage");
+    gotoxy(75,18);
+    printf("Airport");
     gotoxy(50,19);
-    printf("stopage");
+    printf("stoppage");
+    gotoxy(75,19);
+    printf("Khilket");
     gotoxy(50,20);
     printf("stoppage");
+    gotoxy(75,20);
+    printf("Jamuna");
     gotoxy(50,21);
     printf("stoppage");
+    gotoxy(75,21);
+    printf("Badda");
     gotoxy(70,25);
     printf("main menu?");
     getch();
@@ -264,16 +276,28 @@ void routeS_G(){
     printf("Savar to Gulishtan");
     gotoxy(50,16);
     printf("Bus Name:");
+    gotoxy(75,16);
+    printf("Gulistan-Dhamrai");
     gotoxy(50,17);
     printf("starting/Departure");
+    gotoxy(75,17);
+    printf("Savar");
     gotoxy(50,18);
     printf("stoppage");
+    gotoxy(75,18);
+    printf("Gabtoli");
     gotoxy(50,19);
     printf("stopage");
+    gotoxy(75,19);
+    printf("Asad Gate");
     gotoxy(50,20);
     printf("stoppage");
+    gotoxy(75,20);
+    printf("Dhanmondi");
     gotoxy(50,21);
     printf("stoppage");
+    gotoxy(75,21);
+    printf("New Marker");
     gotoxy(70,25);
     printf("main menu?");
     getch();
@@ -289,16 +313,28 @@ void routeM_A(){
     printf("Mirpur To Ashulia");
     gotoxy(50,16);
     printf("Bus Name:");
+    gotoxy(75,16);
+    printf("Sotabdi");
     gotoxy(50,17);
     printf("starting/Departure");
+    gotoxy(75,17);
+    printf("Mirpur 14");
     gotoxy(50,18);
     printf("stoppage");
+    gotoxy(75,18);
+    printf("Mirpur 1");
     gotoxy(50,19);
     printf("stopage");
+    gotoxy(75,19);
+    printf("Birulia");
     gotoxy(50,20);
     printf("stoppage");
+    gotoxy(75,20);
+    printf("Abdullahpur");
     gotoxy(50,21);
     printf("stoppage");
+    gotoxy(75,21);
+    printf("Ashulia");
     gotoxy(70,25);
     printf("main menu?");
     getch();
