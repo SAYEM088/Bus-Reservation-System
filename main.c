@@ -86,7 +86,7 @@ void landingPage(){
 
    printf("\n\n\n");
    gotoxy(65, 17);
-   printf("\033[1;31m"); // Set bold red text
+   printf("\033[1;33m");
      printf("WELCOME TO THE SAM BUS TICKET RESERVATION SYSTEM");
     printf("\033[0m");
      printf("\033[36m");
@@ -98,7 +98,7 @@ void landingPage(){
     printf("ID: 024231005341279");
     printf("\033[0m");
      gotoxy(65, 25);
-      printf("\033[1;44m\033[97m");
+    printf("\033[1;44m\033[97m");
     printf("Enter Any Key to Start.....");
     printf("\033[0m");
      getch();
@@ -143,7 +143,10 @@ void mainMenuBar(){
     waitSpin();
     int press;
         gotoxy(70,10);
+         printf("\033[1;4;33m");
         printf("Menu: ");
+        printf("\033[0m");
+        printf("\033[36m");
         gotoxy(70,12);
         printf("Press 1: To See Routes Info ");
          gotoxy(70,14);
@@ -177,8 +180,11 @@ void mainMenuBar(){
 void routeInfo(){
     waitSpin();
     int number;
+    printf("\033[1;4;33m");
     gotoxy(70,12);
-    printf("our offering routes:");
+    printf("Our offering routes:");
+    printf("\033[0m");
+    printf("\033[36m");
     gotoxy(50,15);
     printf("No:");
     gotoxy(60,15);
@@ -234,9 +240,10 @@ void routeInfo(){
 void routeA_P(){
     waitSpin();
     gotoxy(70,10);
-    printf("\033[41m");
+    printf("\033[1;4;33m");
     printf("The Routes We are offering :");
     printf("\033[0m");
+    printf("\033[36m");
     gotoxy(50,14);
     printf("Route Name:");
     gotoxy(70,14);
@@ -273,7 +280,10 @@ void routeA_P(){
 void routeS_G(){
       waitSpin();
     gotoxy(70,12);
+    printf("\033[1;4;33m");
     printf("The Routes We are offering :");
+    printf("\033[0m");
+    printf("\033[36m");
     gotoxy(50,14);
     printf("Route Name:");
      gotoxy(70,14);
@@ -310,7 +320,10 @@ void routeS_G(){
 void routeM_A(){
       waitSpin();
     gotoxy(70,12);
+    printf("\033[1;4;33m");
     printf("The Routes We are offering :");
+    printf("\033[0m");
+    printf("\033[36m");
     gotoxy(50,14);
     printf("Route Name:");
      gotoxy(70,14);
