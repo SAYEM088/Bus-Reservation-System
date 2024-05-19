@@ -1,7 +1,3 @@
-/*
-sayem 1279                                          17.05.24
-Bus Reservation System
-*/
 #include<windows.h>
 #include<stdio.h>
 #include<conio.h>
@@ -58,7 +54,8 @@ void myBus();
 int passwordChecker(FILE *fileName, char infoFile[50], struct admin st);
 void carDesign(int x);
 void waitSpin();
-
+void cart_route(void (*func)(char*, int), char *name, int ID);
+void showCusInfo(char *name, int ID);
 
 //main code
 int main(){
@@ -89,16 +86,21 @@ void landingPage(){
 
    printf("\n\n\n");
    gotoxy(65, 17);
-   printf("WELCOME TO THE SAM BUS TICKET RESERVATION SYSTEM");
+   printf("\033[1;31m"); // Set bold red text
+     printf("WELCOME TO THE SAM BUS TICKET RESERVATION SYSTEM");
+    printf("\033[0m");
+     printf("\033[36m");
    gotoxy(73, 20);
    printf("Developed by :-");
     gotoxy(80, 22);
     printf("MD ABU SAYEM SARKER");
     gotoxy(80, 23);
     printf("ID: 024231005341279");
+    printf("\033[0m");
      gotoxy(65, 25);
-     set_color(33,5);
-     printf("Enter Any Key to Start.....");
+      printf("\033[1;44m\033[97m");
+    printf("Enter Any Key to Start.....");
+    printf("\033[0m");
      getch();
      system("cls");
      mainMenuBar();
@@ -232,7 +234,9 @@ void routeInfo(){
 void routeA_P(){
     waitSpin();
     gotoxy(70,10);
+    printf("\033[41m");
     printf("The Routes We are offering :");
+    printf("\033[0m");
     gotoxy(50,14);
     printf("Route Name:");
     gotoxy(70,14);
@@ -453,11 +457,16 @@ void signIn(){
     while (fscanf(fileName, "%d %s %s", &customer.ID, customer.name, customer.pass) != EOF) {
         if (strcmp(customer.pass, pass) == 0 && customer.ID == userID && strcmp(customer.name, userName) == 0) {
             system("cls");
-                gotoxy(70,10);
+            gotoxy(70,10);
             printf("Welcome %s", customer.name);
             gotoxy(70,12);
             printf("Your ID: %d", customer.ID);
+            gotoxy(70,15);
+            printf("Press any key to continue......");
             getch();
+            system("cls");
+            cart_route(showCusInfo, customer.name, customer.ID);
+             getch();
             found = 1;
             break;
         }
@@ -472,7 +481,69 @@ void signIn(){
     return ;
     getch();
 }
+void showCusInfo(char *name, int ID){
+    printf("Name: %s    ID: %d", name, ID);
+}
+void cart_route(void (*func)(char*, int), char *name, int ID){
+    waitSpin();
+     int num;
+    gotoxy(60,10);
+    func(name, ID);
+    gotoxy(55,12);
+    printf("Select Your route : ");
+    gotoxy(50,15);
+    printf("No:");
+    gotoxy(60,15);
+    printf("From:");
+    gotoxy(70,15);
+    printf("To:");
+    gotoxy(50,17);
+    printf("1");
+    gotoxy(56,17);
+    printf("Abdullahpur");
+    gotoxy(70,17);
+    printf("Paltan");
+    gotoxy(50,19);
+    printf("2");
+    gotoxy(56,19);
+    printf("Savar");
+    gotoxy(70,19);
+    printf("Gulistan");
+    gotoxy(50,21);
+    printf("3");
+    gotoxy(56,21);
+    printf("Mirpur 14");
+    gotoxy(70,21);
+    printf("Ashulia");
+    gotoxy(50,23);
+    printf("4");
+    gotoxy(60,23);
+    printf("Main Menu ");
+    gotoxy(60,25);
+    printf("Enter Number: ");
+    scanf("%d",&num);
+     do
+    {
+        switch (num)
+        {
+        case 1:
+            routeA_P();
+            break;
+        case 2:
+          routeS_G();
+            break;
+        case 3:
+        routeM_A();
+        break;
+        case 4:
+            mainMenuBar();
+            break;
+        default:
+            break;
+        }
+    } while (num != 4);
 
+}
 int passwordChecker(FILE *fileName, char infoFile[50], struct admin st)  {
     int userID, found = 0;
     char userName[20];
