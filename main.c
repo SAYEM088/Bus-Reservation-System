@@ -428,7 +428,10 @@ void signUp(){
 void signIn(){
     system("cls");
     gotoxy(70, 6);
-    printf("sign in");
+    printf("\033[1;4;33m");
+    printf("Sign In ");
+    printf("\033[0m");
+    printf("\033[36m");
     FILE *fileName;
     char infoFile[]="sam-bus.txt";
 
@@ -441,13 +444,13 @@ void signIn(){
     gotoxy(70, 8);
     printf("Enter Your Info :");
     gotoxy(73, 9);
-    printf(" ID:");
+    printf(" ID: ");
     scanf("%d", &userID);
     gotoxy(73, 10);
-    printf("Name :");
+    printf("Name : ");
     scanf("%s", userName);
     gotoxy(73, 11);
-    printf("Pass :");
+    printf("Pass : ");
 
     while(ch!=13)
     {
@@ -495,7 +498,13 @@ void signIn(){
     getch();
 }
 void showCusInfo(char *name, int ID){
-    printf("Name: %s    ID: %d", name, ID);
+    static char storedName[20];
+    static int storedID;
+
+    strcpy(storedName, name); 
+    storedID = ID;            
+
+    printf("Name: %s    ID: %d\n", storedName, storedID);
 }
 void cart_route(void (*func)(char*, int), char *name, int ID){
     waitSpin();
@@ -503,7 +512,10 @@ void cart_route(void (*func)(char*, int), char *name, int ID){
     gotoxy(60,10);
     func(name, ID);
     gotoxy(55,12);
+    printf("\033[1;4;33m");
     printf("Select Your route : ");
+    printf("\033[0m");
+    printf("\033[36m");
     gotoxy(50,15);
     printf("No:");
     gotoxy(60,15);
