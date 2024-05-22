@@ -7,6 +7,7 @@
 #include<dos.h>
 #include <unistd.h>
 #include<time.h>
+
 //console handle code
 void gotoxy(int x, int y) {
     COORD coord;
@@ -19,6 +20,7 @@ void set_color(int text_color, int bg_color) {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hConsole, text_color | (bg_color << 4));
 }
+
 //text color(ANSI) in marcos
 #define RED     "\x1b[31m"
 #define GREEN   "\x1b[32m"
@@ -39,9 +41,17 @@ struct admin{
     char name[20];
     char pass[6];
 }admin;
+struct Ticket {
+   int ticketNumber;
+    char name[50];
+   long long int ID;
+    double bill;
+};
 //global variable
 char storedName[20];
 long long int storedID;
+double total_bill;
+
 //functions:
 void landingPage();
 void signIn();
@@ -61,7 +71,16 @@ void showCusInfo();
 void cartA_P();
 void cartS_G();
 void cartM_A();
-void printBill(int x);
+void printBill(int x,int start, int end);
+void printBillBusLogo();
+void printBillTicket( double bill);
+void viewCustomers();
+void deleteCustomer();
+void viewTickets();
+void deleteTicket();
+void adminMenu();
+void shutdownSystem();
+
 //main code
 int main(){
     landingPage();
@@ -92,7 +111,7 @@ void landingPage(){
    printf("\n\n\n");
    gotoxy(65, 17);
    printf("\033[1;33m");
-     printf("WELCOME TO THE SAM BUS TICKET RESERVATION SYSTEM");
+     printf("WELCOME TO THE SAYEM BUS TICKET RESERVATION SYSTEM");
     printf("\033[0m");
      printf("\033[36m");
    gotoxy(73, 20);
@@ -331,7 +350,7 @@ void routeS_G(){
     mainMenuBar();
 }
 void routeM_A(){
-      waitSpin();
+    waitSpin();
     gotoxy(60,12);
     printf("\033[1;4;33m");
     printf("The Routes We are offering :");
@@ -374,7 +393,7 @@ void buyTicket(){
     system("cls");
     int cs;
     gotoxy(70,10);
-      printf("\033[1;4;33m");
+    printf("\033[1;4;33m");
      printf("To BOOK A Ticket : ");
     printf("\033[0m");
     printf("\033[36m");
@@ -415,6 +434,16 @@ void signUp(){
     gotoxy(73,12);
     printf("Enter Your Phone Number: +880 ");
     scanf("%lld",&customer.ID);
+        if(customer.ID>9999999999 ){
+        system("cls");
+        system("color C7");
+        gotoxy(70,20);
+        printf("Wrong Input");
+        gotoxy(70,22);
+        printf("Try Again");
+        getch();
+        exit(0);
+    }
     gotoxy(75,13);
     printf("Enter your name : ");
     scanf("%s",customer.name);
@@ -470,7 +499,7 @@ void signIn(){
     gotoxy(73, 9);
     printf(" Phone Number: +880 ");
     scanf("%lld", &userID);
-    if(userID <9999999999 ){
+    if(userID>9999999999 ){
         system("cls");
         system("color C7");
         gotoxy(70,20);
@@ -529,6 +558,7 @@ void signIn(){
 
     if (!found) {
             system("cls");
+             system("color C7");
     gotoxy(60,15);
     printf("\033[1;31m");
      printf("\nNot found\n");
@@ -612,10 +642,89 @@ void cart_route(){
     } while (num != 4);
 
 }
-void printBill(int x){
-     int random_number = rand() % 100 + 1;
-    int total_bill = random_number / x * 15;
-    printf("\nTotal Bill is: %d", total_bill);
+void printBillBusLogo() {
+    gotoxy(43,15);
+    printf("|");
+    gotoxy(43,16);
+    printf("|");
+    gotoxy(43,17);
+    printf("|");
+    gotoxy(43,18);
+    printf("|");
+    gotoxy(43,19);
+    printf("|");
+    gotoxy(43,20);
+    printf("|");
+    gotoxy(43,21);
+    printf("|");
+    gotoxy(108,15);
+    printf("|");
+    gotoxy(108,16);
+    printf("|");
+    gotoxy(108,17);
+    printf("|");
+    gotoxy(108,18);
+    printf("|");
+    gotoxy(108,19);
+    printf("|");
+    gotoxy(108,20);
+    printf("|");
+    gotoxy(108,21);
+    printf("|");
+    gotoxy(45,15);
+    printf("    _______________");
+    gotoxy(45,16);
+    printf("  _/_|[][][][][] | - -");
+    gotoxy(45,17);
+    printf("(                 | - -");
+    gotoxy(45,18);
+    printf("=--OO-------OO--=sam..");
+    gotoxy(45,20);
+    printf("=THANKS BY.......``");
+    gotoxy(45,21);
+    printf("SAYEM BTR co-Ltd.");
+
+}
+void printBillTicket( double bill) {
+    long int ticketNumber = rand()%(rand()*1000)+(storedID);
+
+    printBillBusLogo();
+    gotoxy(44,14);
+    printf("################################################################");
+    gotoxy(70,15);
+    printf("|                                    ");
+    gotoxy(70,16);
+    printf("|         YOUR TICKET                ");
+    gotoxy(70,17);
+    printf("|....................................");
+    gotoxy(70,19);
+    printf("| Name: %s ", storedName);
+    gotoxy(70,18);
+    printf("| Ticket Number: %d ", ticketNumber);
+    gotoxy(70,20);
+    printf("| Bill: $ %.2f ", bill);
+    gotoxy(44,22);
+    printf("...................................##############################");
+    getch();
+
+
+     FILE *file = fopen("cart-Info.txt", "a");
+    if (file == NULL) {
+        printf("Error opening file!\n");
+        return;
+    }
+
+    fprintf(file, "%d %s %d %.2f\n", ticketNumber, storedName, storedID, bill);
+    fclose(file);
+    exit(0);
+}
+
+void printBill(int x,int start, int end){
+     int random_number = (end-start)*10;
+    int bill = (random_number * x);
+    total_bill=bill+(bill*0.015);
+    system("cls");
+    printBillTicket(total_bill);
 }
 
 void cartA_P(){
@@ -656,7 +765,7 @@ void cartA_P(){
     printf("Enter NO of Ticket: ");
    scanf("%d",&noOfTicket);
    gotoxy(55,26);
-   printBill(noOfTicket);
+   printBill(noOfTicket,start,end);
 getch();
 }
 void cartS_G(){
@@ -697,7 +806,7 @@ void cartS_G(){
     printf("Enter NO of Ticket: ");
    scanf("%d",&noOfTicket);
    gotoxy(55,26);
-   printBill(noOfTicket);
+   printBill(noOfTicket,start,end);
 getch();
 }
 void cartM_A(){
@@ -734,7 +843,7 @@ int noOfTicket,start,end;
     printf("Enter NO of Ticket: ");
    scanf("%d",&noOfTicket);
    gotoxy(55,26);
-   printBill(noOfTicket);
+   printBill(noOfTicket,start,end);
 getch();
 }
 int passwordChecker(FILE *fileName, char infoFile[50], struct admin st)  {
@@ -745,15 +854,15 @@ int passwordChecker(FILE *fileName, char infoFile[50], struct admin st)  {
     int i = 0;
 
     gotoxy(70, 8);
-    printf("Enter Your Info :");
+    printf("Admin Please Enter Your Info :");
     gotoxy(73, 9);
-    printf(" ID:");
+    printf(" ID: ");
     scanf("%d", &userID);
     gotoxy(73, 10);
-    printf("Name :");
+    printf("Name : ");
     scanf("%s", userName);
     gotoxy(73, 11);
-    printf("Pass :");
+    printf("Pass : ");
 
     while(ch!=13)
     {
@@ -769,13 +878,20 @@ int passwordChecker(FILE *fileName, char infoFile[50], struct admin st)  {
 
     fileName = fopen(infoFile, "r");
     if (fileName == NULL) {
-        printf("Error opening file!\n");
+             system("color C7");
+    gotoxy(73,12);
+        printf("Error opening file!");
         return -1;
     }
 
     while (fscanf(fileName, "%d %s %s", &st.ID, st.name, st.pass) != EOF) {
         if (strcmp(st.pass, pass) == 0 && st.ID == userID && strcmp(st.name, userName) == 0) {
-            printf("\nWelcome %s\nYour ID: %d\n\n", st.name, st.ID);
+                gotoxy(73, 13);
+                 printf("\033[1;33m");
+            printf("Welcome Admin %s : Your ID: %d", st.name, st.ID);
+             printf("\033[0m");
+        usleep(500000);
+            adminMenu();
             found = 1;
             break;
         }
@@ -784,7 +900,10 @@ int passwordChecker(FILE *fileName, char infoFile[50], struct admin st)  {
     fclose(fileName);
 
     if (!found) {
-        printf("\nNot found\n");
+            system("cls");
+     system("color C7");
+        gotoxy(73, 13);
+        printf("Not found");
         exit(0);
     }
     return 0;
@@ -795,4 +914,213 @@ void myBus(){
     FILE *adminInfo;
     char adminInfoFile[]="admin-info.txt";
     passwordChecker(adminInfo, adminInfoFile, admin);
+}
+
+void adminMenu() {
+    system("cls");
+    waitSpin();
+    int choice;
+    gotoxy(60,15);
+    printf("Admin Menu:");
+    gotoxy(60,17);
+    printf("1. View Customers");
+    gotoxy(60,18);
+    printf("2. Delete Customer");
+    gotoxy(60,19);
+    printf("3. View Tickets");
+    gotoxy(60,20);
+    printf("4. Delete Ticket");
+    gotoxy(60,21);
+    printf("5. Shutdown System");
+    gotoxy(60,22);
+    printf("6. Go Back to Main Menu");
+    gotoxy(60,23);
+    printf("Enter your choice:  ");
+    scanf("%d", &choice);
+
+    switch (choice) {
+        case 1:
+            viewCustomers();
+            break;
+        case 2:
+            deleteCustomer();
+            break;
+        case 3:
+            viewTickets();
+            break;
+        case 4:
+            deleteTicket();
+            break;
+        case 5:
+            shutdownSystem();
+            break;
+        case 6:
+            mainMenuBar();
+            break;
+        default:
+            system("cls");
+            waitSpin();
+            gotoxy(60,14);
+            printf("Invalid choice. Try again.");
+            adminMenu();
+    }
+}
+void viewTickets() {
+    system("cls");
+    waitSpin();
+    FILE *ticketFile = fopen("cart-Info.txt", "r");
+    if (ticketFile == NULL) {
+        gotoxy(60,15);
+        printf("Error opening ticket info file!");
+        adminMenu();
+        return;
+    }
+
+    struct Ticket ticket;
+    gotoxy(60,12);
+    printf("Ticket Information:");
+    int f=0;
+    while (fscanf(ticketFile, "%d %s %lld %lf", &ticket.ticketNumber, ticket.name,&ticket.ID, &ticket.bill) != EOF) {
+            gotoxy(60,(14+f));
+        printf("Ticket Number: %d", ticket.ticketNumber);
+        gotoxy(60,(15+f));
+        printf("Name: %s", ticket.name);
+        gotoxy(60,(16+f));
+        printf("ID: %lld",ticket.ID);
+        gotoxy(60,(17+f));
+        printf("Bill: %.2f", ticket.bill);
+        gotoxy(60,(18+f));
+        printf("------------------------");
+        f++;
+    }
+    fclose(ticketFile);
+    printf("Enter Any key to Continue....");
+    getch();
+    adminMenu();
+}
+void deleteTicket() {
+    system("cls");
+    waitSpin();
+    int ticketNumber;
+        gotoxy(60,14);
+    printf("Enter the ticket number to delete: ");
+    scanf("%d", &ticketNumber);
+
+    FILE *file = fopen("cart-Info.txt", "r");
+    FILE *temp = fopen("temp.txt", "w");
+    if (file == NULL || temp == NULL) {
+            system("cls");
+            waitSpin();
+            gotoxy(60,14);
+        printf("Error opening file!");
+        return;
+    }
+
+    struct Ticket ticket;
+    int found = 0;
+    while (fscanf(file, "%d %s %lld %lf", &ticket.ticketNumber, ticket.name,&ticket.ID, &ticket.bill) != EOF) {
+        if (ticket.ticketNumber == ticketNumber) {
+            found = 1;
+        } else {
+            fprintf(temp, "%d %s %.2f\n", ticket.ticketNumber, ticket.name, ticket.bill);
+        }
+    }
+
+    fclose(file);
+    fclose(temp);
+
+    remove("cart-Info.txt");
+    rename("temp.txt", "cart-Info.txt");
+
+    if (found) {
+            system("cls");
+            waitSpin();
+            gotoxy(60,14);
+        printf("Ticket with number %d deleted successfully.", ticketNumber);
+    } else {
+        system("cls");
+            waitSpin();
+            gotoxy(60,14);
+        printf("Ticket with number %d not found.", ticketNumber);
+    }
+            gotoxy(60,17);
+    printf("Enter Any key to Continue....");
+    getch();
+    adminMenu();
+}
+
+void viewCustomers() {
+    system("cls");
+    waitSpin();
+    FILE *file = fopen("sam-bus.txt", "r");
+    if (file == NULL) {
+            system("cls");
+            waitSpin();
+            gotoxy(60,14);
+        printf("Error opening customer info file!");
+        return;
+    }
+
+    struct customer cust;
+    printf("\nCustomer Information:\n");
+    while (fscanf(file, "%d %s %s", &cust.ID, cust.name, cust.pass) != EOF) {
+        printf("ID: %d\n", cust.ID);
+        printf("Name: %s\n", cust.pass);
+        printf("Password: %s\n", cust.name);
+        printf("------------------------\n");
+    }
+
+    fclose(file);
+    printf("Enter Any key to Continue....");
+    getch();
+    adminMenu();
+}
+
+
+void deleteCustomer() {
+    system("cls");
+    waitSpin();
+   long long int id;
+    printf("Enter the ID of the customer to delete: ");
+    scanf("%lld", &id);
+
+    FILE *file = fopen("sam-bus.txt", "r");
+    FILE *temp = fopen("temp.txt", "w");
+    if (file == NULL || temp == NULL) {
+        printf("Error opening file!\n");
+        return;
+    }
+
+    struct customer cust;
+    int found = 0;
+    while (fscanf(file, "%lld %s %s", &cust.ID, cust.name, cust.pass) != EOF) {
+        if (cust.ID == id) {
+            found = 1;
+        } else {
+            fprintf(temp, "%lld %s %s\n", cust.ID, cust.name, cust.pass);
+        }
+    }
+
+    fclose(file);
+    fclose(temp);
+
+    remove("sam-bus.txt");
+    rename("temp.txt", "sam-bus.txt");
+
+    if (found) {
+        printf("Customer with ID %d deleted successfully.\n", id);
+    } else {
+        printf("Customer with ID %d not found.\n", id);
+    }
+
+    printf("Enter Any key to Continue....");
+    getch();
+    adminMenu();
+}
+
+void shutdownSystem() {
+    system("cls");
+    waitSpin();
+    printf("Shutting down the system...\n");
+    exit(0);
 }
